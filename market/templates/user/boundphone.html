@@ -1,0 +1,27 @@
+
+{% extends 'basetem/basetem_user.html' %}
+{% load static %}
+{% block title %}
+修改手机号码
+{% endblock %}
+{% block aaa %}
+   修改手机号码
+{% endblock %}
+{% block head_css %}
+<link href="{% static 'css/check.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+<div class="pay-iphone">请填写新手机号并进行验证</div>
+	    <div class="pay-box">
+	    	<input type="text" placeholder="请输入新手机号" />
+	    	<input type="button" value="获取验证码" class="pay-box-btn" />
+	    </div>
+	    <input type="text" placeholder="请输入验证码" class="login-password" />
+	    <input type="button" class="login-btn" value="确认">
+	    <div class="bound-text">
+		    <h2>手机绑定规则</h2>
+		    <p>1.一个手机号码只可以绑定一个账户；</p>
+	        <p>2.如果无法绑定手机，请联系客服协助解决。</p>
+        </div>
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends 'basetem/basetem_user.html' %}
+
+{% load static %}
+
+{% block title %}
+    {{ goods_sku.goods_spu.spu_name }}&emsp;{{ goods_sku.sku_name }}
+{% endblock %}
+
+{% block head_css %}
+    <script>
+        function changeImage() {
+            document.getElementById("imgflag").src = "{% static 'images/redherat.png' %}";
+        }
+    </script>
+
+    <style>
+        .am-slider-default .am-control-nav {
+            text-align: center;
+        }
+
+        .am-slider-default .am-control-nav li a.am-active {
+            background: #cb2527;
+        }
+
+        .am-slider-default .am-control-nav li a {
+            border: 0;
+            width: 10px;
+            height: 10px;
+        }
+    </style>
+{% endblock %}
+
+
+{% block header %}
+    <header data-am-widget="header" class="am-header am-header-default sq-head ">
+        <div class="am-header-left am-header-nav">
+            <a href="javascript:history.back()" class="">
+                <i class="am-icon-chevron-left"></i>
+            </a>
+        </div>
+        <h1 class="am-header-title">
+            <a href="" class="">商品详情</a>
+        </h1>
+    </header>
+    <div style="height: 49px;"></div>
+{% endblock %}
+
+
+{% block content %}
+    <!--图片轮换-->
+    <div class="am-slider am-slider-default" data-am-flexslider id="demo-slider-0">
+        <ul class="am-slides">
+            {% for gallery in goods_sku.gallery_set.all %}
+            <li><img src="{{ MEDIA_URL }}{{ gallery.img_url }}"/></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="detal-info" style="position: relative; width: 100%;">
+        <p>{{ goods_sku.goods_spu.spu_name }}&emsp;{{ goods_sku.sku_name }}</p>
+        <h2>商城价：<span>￥{{goods_sku.price}}</span></h2>
+        <div class="heart">
+            <img src="{% static 'images/herat.png' %}" width="25" id="imgflag" onclick="changeImage()"/>
+            <p>收藏</p>
+        </div>
+    </div>
+    <div class="d-amount">
+        <h4>数量：</h4>
+        <div class="d-stock">
+            <a class="decrease">-</a>
+            <input id="num" readonly="" class="text_box" name="" type="text" value="1">
+            <input id="count" sku_id="{{ goods_sku.pk }}" type="hidden" value="1">
+            <a class="increase">+</a>
+            <span id="dprice" class="price" style="display:none"> 36</span>
+        </div>
+    </div>
+    <div style="background: #eee; height: 10px;"></div>
+    <div class="am-tabs detail-list" data-am-tabs>
+        <ul class="am-tabs-nav am-nav am-nav-tabs">
+            <li class="am-active"><a href="#tab1">商品详情</a></li>
+            <li><a href="#tab2">商品评论</a></li>
+        </ul>
+
+        <div class="am-tabs-bd">
+            <div class="am-tab-panel am-fade am-in am-active detail " id="tab1">
+                {{ goods_sku.goods_spu.content|safe }}
+            </div>
+            <div class="am-tab-panel am-fade detail " id="tab2">
+                <ul class="comment-list">
+                    <li class="current"><a href="">全部</a></li>
+                    <li><a href="">好评（20）</a></li>
+                    <li><a href="">中评（5）</a></li>
+                    <li><a href="">差评（0）</a></li>
+                </ul>
+                <ul class="comment-pic">
+                    <li>
+                        <div class="tit">
+                            <img src="{% static 'images/tx.png' %}" class="tx"/>
+                            <span>songke2014</span>
+                            <i> [2016-01-01]</i>
+                        </div>
+                        <div class="comment-con">
+                            买了些给家人，都说不错！
+                        </div>
+                    </li>
+                    <li>
+                        <div class="tit">
+                            <img src="{% static 'images/tx.png' %}" class="tx"/>
+                            <span>songke2014</span>
+                            <i> [2016-01-01]</i>
+                        </div>
+                        <div class="comment-con">
+                            买了些给家人，都说不错！
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block footer %}
+    <!--底部-->
+    <div style=" height: 55px;"></div>
+    <ul class="fix-shopping">
+        <li><a href="javascript:;" class="join">加入购物车</a></li>
+        <li><a href="tureorder.html" class="imm-buy">立即购买</a></li>
+    </ul>
+{% endblock %}
+
+{% block footer_js %}
+    <script>
+        //购物数量加减
+        $(function () {
+            $('.increase').click(function () {
+                var self = $(this);
+                var current_num = parseInt(self.siblings('input').val());
+                current_num += 1;
+                self.siblings('input').val(current_num);
+            })
+            $('.decrease').click(function () {
+                var self = $(this);
+                var current_num = parseInt(self.siblings('input').val());
+                if (current_num > 1) {
+                    current_num -= 1;
+                    self.siblings('input').val(current_num);
+                }
+            })
+
+
+            //添加数据到购物车
+            $(".join").on('click',function () {
+                //完成ajax请求
+                // 准备数据
+                //sku_id 在input 上添加一个自定义属性 sku_id=1
+                //找到input获取自定义的属性值
+                var sku_id = $("#count").attr('sku_id');
+                var count = $("#count").val();
+                var data = {
+                    'csrfmiddlewaretoken':'{{ csrf_token }}',
+                    'count':count,
+                    'sku_id':sku_id
+                };
+                $.ajax({
+                    type:"post",
+                    url:"{% url 'cart:添加购物车' %}",
+                    data:data,
+                    dataType:"json",
+                    success: function (data) {
+                        if (data.code == 0){
+                            //添加成功
+                            //跳转到购物车展示页面
+                            location.href = "{% url 'cart:购物车页面' %}";
+                        }else if(data.code == 1){
+                            //未登录陆,跳转到登录页面
+                            if(confirm("没有登录,是否立即登录?")){
+                                location.href = "{% url '用户:用户登录' %}"
+                            }
+                        }else {
+                            alert(data.errmsg);
+                        }
+                    }
+                });
+
+            });
+        })
+    </script>
+{% endblock %}
+

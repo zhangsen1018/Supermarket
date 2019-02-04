@@ -1,0 +1,38 @@
+{% extends 'basetem/basetem_user.html' %}
+{% load static %}
+{% block title %}
+    登录
+{% endblock %}
+{% block aaa %}
+    登录
+{% endblock %}
+{% block content %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <div style="height: 49px;"></div>
+        <!--<div class="login-logo">
+            <img src="images/logo.png" />
+        </div>-->
+        <div style="height: 3rem;"></div>
+        <input type="text" name="username" id="mobile" placeholder="请输入用户名/手机号" value="{{ request.POST.username }}" class="login-name">
+        <p class="am-text-danger">{{ form.errors.username.0 }}</p>
+
+        <p class="am-text-danger">{{ context }}</p>
+        <input type="password" name="password" id="password" placeholder="请输入密码" value="{{ request.POST.password }}" class="login-password">
+        <p class="am-text-danger">{{ form.errors.password.0 }}</p>
+        <p class="am-text-danger">{{ context }}</p>
+        <input type="submit" class="login-btn" value="我要登录">
+        <div class="agree">
+            <a href="{% url '用户:用户注册' %}">免费注册</a>
+            <a href="{% url '用户:忘记密码' %}" class="forget">忘记密码？</a>
+        </div>
+    </form>
+    <div class="line"></div>
+    <div class="line-text">第三方账号登录</div>
+    <ul class="second-login">
+        <li><a href=""><img src="{% static 'images/wxlogin.png' %}"/></a></li>
+        <li><a href=""><img src="{% static 'images/qqlogin.png' %}"/></a></li>
+        <li><a href=""><img src="{% static 'images/sinalog.png' %}"/></a></li>
+    </ul>
+
+{% endblock %}

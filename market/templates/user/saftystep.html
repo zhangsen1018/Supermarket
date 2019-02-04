@@ -1,0 +1,38 @@
+{% extends 'basetem/basetem_user.html' %}
+{% load static %}
+
+{% block title %}
+安全设置页
+{% endblock %}
+
+{% block aaa %}
+   安全设置
+{% endblock %}
+
+{% block content %}
+	    <ul class="safty">
+	    	<li>
+	    		<a href="{% url '用户:重置密码' %}">
+	    			<img src="{% static 'images/update.png' %}" width="40" />
+	    			<i>修改登录密码</i>
+	    			<span class="am-icon-angle-right"></span>
+	    		</a>
+	    	</li>
+	    	<li>
+	    		<a href="payment.html">
+	    			<img src="{% static 'images/moneysafty.png' %}" width="40" />
+	    			<i>设置支付密码</i>
+	    			<span class="am-icon-angle-right"></span>
+	    		</a>
+	    	</li>
+	    	<li>
+	    		<a href="{% url '用户:重置手机号码' %}">
+	    			<img src="{% static 'images/moneytele.png' %}" width="40" />
+	    			<i>绑定手机号</i>
+	    			<span class="am-icon-angle-right"></span>
+	    			<i style="float: right; padding-right: 10px;">136****3128</i>
+	    		</a>
+	    		<p style="overflow: hidden;">若你的手机已修改或信用，请立即更换</p>
+	    	</li>
+	    </ul>
+{% endblock %}

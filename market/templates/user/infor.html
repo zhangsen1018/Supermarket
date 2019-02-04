@@ -1,0 +1,74 @@
+{% extends 'basetem/basetem_user.html' %}
+{% load static %}
+
+{% block title %}
+    个人资料
+{% endblock %}
+{% block aaa %}
+    个人资料
+{% endblock %}
+
+{% block head_css %}
+    <link href="{% static 'css/check.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock %}
+{% block content %}
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <ul class="safty1">
+            <li>
+                <i>头像</i>
+
+                <div class="infor-pic">
+                    <img src="{{  MEDIA_URL  }}{{ user.use_img }}"/>
+                </div>
+                <input style="margin-top: 25px;" type="file" name="use_img"/>
+            </li>
+            <li>
+                <i>昵称</i>
+                <input class="infor-tele" name="my_name" value="{{ user.my_name|default:'' }}" placeholder="默认"/>
+                <p class="am-text-danger">{{ form.errors.my_name.0 }}</p>
+            </li>
+            <li>
+                <i>性别</i>
+                <i class="infor-tele">
+                    <label class="am-radio-inline">
+                        <input type="radio" name="sex" checked="checked" value="1" data-am-ucheck>男
+                    </label>
+                    <label class="am-radio-inline">
+                        <input type="radio" name="sex" value="2" data-am-ucheck>女
+                    </label>
+
+                </i>
+            </li>
+            <li>
+                <i>生日</i>
+                <input class="infor-tele" name="my_birthday" value="{{ user.my_birthday|default:'' }}" placeholder="出生日期"/>
+                <p class="am-text-danger">{{ form.errors.my_birthday.0 }}</p>
+            </li>
+        </ul>
+        <div style="height: 10px; background: #efefef;"></div>
+        <ul class="safty1">
+            <li>
+                <i>学校</i>
+                <input class="infor-tele" name="school"  value="{{ user.school|default:'' }}" placeholder="就读于哪个学校"/>
+                <p class="am-text-danger">{{ form.errors.school.0 }}</p>
+            </li>
+            <li>
+                <i>位置</i>
+                <input class="infor-tele" name="my_home"  value="{{ user.my_home|default:'' }}" placeholder="详细地址"/>
+                <p class="am-text-danger">{{ form.errors.my_home.0 }}</p>
+            </li>
+            <li>
+                <i>故乡</i>
+                <input class="infor-tele" name="address" value="{{ user.address|default:'' }}" placeholder="来自哪里"/>
+                <p class="am-text-danger">{{ form.errors.address.0 }}</p>
+            </li>
+            <li>
+                <i>手机</i>
+                <p><b>{{ request.session.username }}</b></p>
+            </li>
+        </ul>
+        <input type="submit" class="am-btn am-btn-warning" value="修改资料">
+    </form>
+{% endblock %}
+

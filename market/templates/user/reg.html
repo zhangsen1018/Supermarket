@@ -1,0 +1,162 @@
+{% extends 'basetem/basetem_user.html' %}
+{% load static %}
+
+{% block title %}
+    注册
+{% endblock %}
+{% block aaa %}
+    注册
+{% endblock %}
+{% block content %}
+
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <div style="height: 49px;"></div>
+        <!--<div class="login-logo">
+            <img src="images/logo.png" />
+        </div>-->
+        <div style="height: 3rem;"></div>
+        <input type="text" name="username" id="username" value="{{ request.POST.username }}" placeholder="请输入手机号"
+               class="login-name">
+        <p class="am-text-danger">{{ form.errors.username.0 }}</p>
+        <input type="text" name="password" placeholder="请输入密码" class="login-password">
+        <p class="am-text-danger">{{ form.errors.password.0 }}</p>
+        <input type="password" name="repassword" placeholder="确认密码" class="login-name">
+        <p class="am-text-danger">{{ form.errors.repassword.0 }}</p>
+        <div class="yzm" style="margin-top: 1.5rem;">
+            <input type="text" class="reg-yzm" name='captcha' placeholder="输入验证码"/>
+            <input type="button" class="yzm-hq" value="获取验证码"/>
+        </div>
+        <p class="am-text-danger">{{ form.errors.captcha.0 }}</p>
+        <input type="submit" class="login-btn" value="立即注册">
+
+        <div class="agree">
+            <input type="checkbox" name="agree" value="同意" checked="">&nbsp;同意
+            <a href="" class="xy">《用户协议》</a>
+            <div class="r-login">已有账号，请<a href="{% url '用户:用户登录' %}" class="l-login">登录</a></div>
+            <p class="am-text-warning">{{ form.errors.agree.0 }}</p>
+        </div>
+    </form>
+{% endblock %}
+
+{#{% block footer_js %}#}
+{#    <script>#}
+{#   //js 代码网页加载完毕才能执行#}
+{#        $(function () {#}
+{#             //网页加载完毕才执行#}
+{#            //1. 绑定点击事件#}
+{#            $('.yzm-hq').on('click', function () {#}
+{#                // 获取手机号码#}
+{#                var username = $('input[name=username]').val();#}
+{#                var that = this;#}
+{#                //ajax请求#}
+{#                $.ajax({#}
+{#                    type: 'post',#}
+{#                    url: '{% url '用户:验证码' %}',#}
+{#                    data: {"username": username, "csrfmiddlewaretoken": "{{ csrf_token }}"},#}
+{#                    dataType: "json",#}
+{#                    success: function (data) {#}
+{#                        if (data.ok == 1) {#}
+{#                            var day = 120;#}
+{#                            $(that).attr('disabled', true);#}
+{#                            $(that).css({'backgroundColor': "#cb2527"});#}
+{#                            showMsg(that, day);#}
+{#                            var time = window.setInterval(function () {#}
+{#                                // 时间减少#}
+{#                                --day;#}
+{#                                // 显示文字#}
+{#                                showMsg(that, day);#}
+{#                                // 判断是否到期#}
+{#                                if (day == 0) {#}
+{#                                    // 到期后清除定时器#}
+{#                                    window.clearInterval(time);#}
+{#                                    // 启用按钮#}
+{#                                    $(that).attr('disabled', false);#}
+{#                                    // 改变颜色和文字内容#}
+{#                                    $(that).css({'backgroundColor': "#76bb2a"});#}
+{#                                    $(that).val("获取验证码");#}
+{#                                }#}
+{#                            }, 1000)#}
+{#                        } else {#}
+{#                            alert(data.msg)#}
+{#                        }#}
+{#                    }#}
+{#                })#}
+{##}
+{#            });#}
+{##}
+{#            function showMsg(obj, day) {#}
+{#                var msg = day + "秒后重新发送!";#}
+{#                $(obj).val(msg);#}
+{#            }#}
+{#        })#}
+{#    </script>#}
+{##}
+{#{% endblock %}#}
+
+{% block footer_js %}
+    <script type="application/javascript">
+        //js代码网页加载完毕才能执行
+        $(function () {
+            //网页加载完毕才执行
+            //1. 绑定点击事件
+            $('.yzm-hq').on('click', function () {
+                //测试请求发送情况
+                console.debug(111)
+                //2. 获取手机号码, 手机号码上添加一个id
+                var username = $('#username').val();
+                //验证手机的格式
+                var reg = /^1[3-9]\d{9}$/;
+                //验证手机号码
+                if (!reg.test(username)) {
+                    //验证失败
+                    alert("手机号码格式错误!");
+                    return;
+                }
+
+                var self = this;
+                //3. 发送ajax请求
+                $.ajax({
+                    type: 'post',
+                    url: '{% url "用户:验证码" %}',
+                    data: {'username': username, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                    dataType: "json",
+                    success: function (data) {
+                        //4. 判断是否发送成功
+                        if (data.error == 0) {
+
+                            //1. 按钮颜色变灰
+                            $(self).css("background-color", "gray");
+                            //2. 按钮不能再点击
+                            $(self).attr('disabled', true);
+                            //3. 开始倒计时 周期型执行函数
+                            var time = 60;
+                            var msg = time + "秒后重新发送";
+                            $(self).val(msg);
+                            var timer = window.setInterval(function () {
+                                time -= 1;
+                                if (time == 0) {
+                                    //1. 按钮颜色变绿
+                                    $(self).css("background-color", "#76bb2a");
+                                    //2. 按钮能再点击
+                                    $(self).prop('disabled', false);
+                                    //3. 返回原来的提示文字
+                                    $(self).val("获取验证码");
+                                    //4. 到期后清除定时器
+                                    window.clearInterval(timer);
+                                    //返回
+                                    return;
+                                }
+                                msg = time + "秒后重新发送";
+                                $(self).val(msg);
+                            }, 1000);
+
+                        } else {
+                            alert(data.errmsg)
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+{% endblock %}
