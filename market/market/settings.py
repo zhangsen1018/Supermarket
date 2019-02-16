@@ -191,3 +191,25 @@ HAYSTACK_CONNECTIONS = {
 }
 # 当添加、修改、删除数据时，自动生成索引
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
+# 每页显示条数
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 50
+
+# 七牛云配置
+# 七牛云密钥等配置
+# QINIU_ACCESS_KEY = 'GWerxF4mvrF3bBypDAh4VWYqpugSp5eziVFB0kl-'
+# QINIU_SECRET_KEY = 'xQaVFptvdD15gvg82QVSTd9fXgrK_0wG98VhU6uq'
+# QINIU_BUCKET_NAME = 'img-zhangsen'
+# QINIU_BUCKET_DOMAIN = 'pmzxz1z12.bkt.clouddn.com'
+# QINIU_SECURE_URL = False  # 使用http
+# PREFIX_URL = 'http://'
+#
+# # 上传文件地址配置
+# # MEDIA_URL = PREFIX_URL + QINIU_BUCKET_DOMAIN + "/"
+# # 上传文件的存储引擎配置(之前上传django自带)
+# DEFAULT_FILE_STORAGE = 'qiniustorage.backends.QiniuStorage'
+#
+# # django中静态文件的存储
+# # 静态文件的url配置
+# # STATIC_URL = QINIU_BUCKET_DOMAIN + '/static/'
+# # 静态文件的存储引擎
+# STATICFILES_STORAGE = 'qiniustorage.backends.QiniuStaticStorage'
